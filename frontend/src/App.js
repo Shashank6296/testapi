@@ -9,7 +9,7 @@ const App = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axios.get('https://event-management-rho-lyart.vercel.app/');
+        const response = await axios.get('https://dashboard.render.com/web/srv-cu4f06lds78s739sj9q0/deploys/dep-cu4f07lds78s739sja8g/');
         setEvents(response.data);
       } catch (error) {
         console.error('Error fetching events:', error);
