@@ -65,22 +65,13 @@ const EventForm = ({ setEvents, eventToEdit, setEventToEdit }) => {
 
     try {
       if (eventToEdit) {
-<<<<<<< HEAD
         
         const response = await axios.put(`http://localhost:5000/api/events${eventToEdit._id}`, formData);
-=======
-        // Update event
-        const response = await axios.put(`http://localhost:5000/api/events/${eventToEdit._id}`, formData);
->>>>>>> 21d19b6cd2fb9e71eedecea651344c515aecfc6b
         setEvents((prevEvents) =>
           prevEvents.map((event) => (event._id === eventToEdit._id ? response.data : event))
         );
       } else {
-<<<<<<< HEAD
         
-=======
-        // Create new event
->>>>>>> 21d19b6cd2fb9e71eedecea651344c515aecfc6b
         const response = await axios.post('http://localhost:5000/api/events', formData);
         setEvents((prevEvents) => [...prevEvents, response.data]);
       }
