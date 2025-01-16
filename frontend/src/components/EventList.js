@@ -13,6 +13,11 @@ const EventList = ({ events, setEvents }) => {
 
   const handleEdit = async (id) => {
     const eventToEdit = events.find((event) => event._id === id);
+    if (!eventToEdit) {
+      console.error('Event not found');
+      return;
+    }
+
     const updatedName = prompt('Edit Event Name:', eventToEdit.name);
     const updatedLocation = prompt('Edit Event Location:', eventToEdit.location);
     const updatedDescription = prompt('Edit Event Description:', eventToEdit.description);
@@ -39,9 +44,7 @@ const EventList = ({ events, setEvents }) => {
   return (
     <div className="container my-4">
       <h1 className="text-center mb-4">Events</h1>
-      {events.length === 0 ? (
-        <p className="text-center">No events available</p>
-      ) : (
+      {Array.isArray(events) && events.length > 0 ? (
         <div className="row g-3">
           {events.map((event) => (
             <div className="col-12 col-md-6 col-lg-3" key={event._id}>
@@ -87,6 +90,8 @@ const EventList = ({ events, setEvents }) => {
             </div>
           ))}
         </div>
+      ) : (
+        <p className="text-center">No events available</p>
       )}
     </div>
   );
