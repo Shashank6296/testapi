@@ -4,7 +4,7 @@ import axios from 'axios';
 const EventList = ({ events, setEvents }) => {
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/events/${id}`);
+      await axios.delete(`https://testapi-3-a0gg.onrender.com/${id}`);
       setEvents((prevEvents) => prevEvents.filter((event) => event._id !== id));
     } catch (error) {
       console.error('Error deleting event:', error);
