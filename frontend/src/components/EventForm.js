@@ -12,14 +12,14 @@ const EventForm = ({ setEvents, eventToEdit, setEventToEdit }) => {
     reminder: '',
   });
 
-  // Request notification permission on component mount
+  
   useEffect(() => {
     if (Notification.permission !== 'granted') {
       Notification.requestPermission();
     }
   }, []);
 
-  // Set form data if editing an event
+  
   useEffect(() => {
     if (eventToEdit) {
       setFormData({
@@ -41,12 +41,12 @@ const EventForm = ({ setEvents, eventToEdit, setEventToEdit }) => {
 
   const setReminderNotification = () => {
     if (formData.reminder) {
-      const reminderDate = new Date(formData.reminder);  // Ensure reminder date is correct
+      const reminderDate = new Date(formData.reminder);  
       const now = new Date();
 
-      // Set reminder notification if the reminder date is in the future
+      
       if (reminderDate > now) {
-        const timeDifference = reminderDate - now;  // Time difference in milliseconds
+        const timeDifference = reminderDate - now;  
 
         setTimeout(() => {
           new Notification('Event Reminder', {
@@ -60,23 +60,23 @@ const EventForm = ({ setEvents, eventToEdit, setEventToEdit }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Set reminder notification
+    
     setReminderNotification();
 
     try {
       if (eventToEdit) {
-        // Update event
-        const response = await axios.put(`https://event-management-rho-lyart.vercel.app/${eventToEdit._id}`, formData);
+        
+        const response = await axios.put(`http://localhost:5000/api/events${eventToEdit._id}`, formData);
         setEvents((prevEvents) =>
           prevEvents.map((event) => (event._id === eventToEdit._id ? response.data : event))
         );
       } else {
-        // Create new event
-        const response = await axios.post('https://event-management-rho-lyart.vercel.app/', formData);
+        
+        const response = await axios.post('http://localhost:5000/api/events', formData);
         setEvents((prevEvents) => [...prevEvents, response.data]);
       }
 
-      // Clear form after submitting
+      
       setFormData({
         name: '',
         date: '',

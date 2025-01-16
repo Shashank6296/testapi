@@ -7,7 +7,7 @@ const eventRoutes = require('./routes/eventRoutes');
 dotenv.config();
 const app = express();
 
-app.use(cors({ origin: "https://event-management-rho-lyart.vercel.app/" }));
+app.use(cors());
 app.use(express.json());
 
 mongoose
