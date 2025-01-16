@@ -66,13 +66,13 @@ const EventForm = ({ setEvents, eventToEdit, setEventToEdit }) => {
     try {
       if (eventToEdit) {
         // Update event
-        const response = await axios.put(`https://dashboard.render.com/web/srv-cu4f06lds78s739sj9q0/deploys/dep-cu4f07lds78s739sja8g/${eventToEdit._id}`, formData);
+        const response = await axios.put(`http://localhost:5000/api/events/${eventToEdit._id}`, formData);
         setEvents((prevEvents) =>
           prevEvents.map((event) => (event._id === eventToEdit._id ? response.data : event))
         );
       } else {
         // Create new event
-        const response = await axios.post('https://dashboard.render.com/web/srv-cu4f06lds78s739sj9q0/deploys/dep-cu4f07lds78s739sja8g/', formData);
+        const response = await axios.post('http://localhost:5000/api/events', formData);
         setEvents((prevEvents) => [...prevEvents, response.data]);
       }
 
