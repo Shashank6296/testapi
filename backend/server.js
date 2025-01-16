@@ -11,7 +11,7 @@ app.use(cors({origin: "https://testapi-kvhk.vercel.app/"}));
 app.use(express.json());
 
 mongoose
-  .connect(process.env.MONGO_URI, )
+  .connect('mongodb+srv://devshashank79:UIEyAOILrJVA8mLm@cluster0.ca7oq.mongodb.net/mydb')
   .then(() => console.log('MongoDB Connected'))
   .catch((err) => console.error(err));
 
