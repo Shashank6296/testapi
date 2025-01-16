@@ -4,7 +4,7 @@ import axios from 'axios';
 const EventList = ({ events, setEvents }) => {
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://event-management-rho-lyart.vercel.app//${id}`);
+      await axios.delete(`https://dashboard.render.com/web/srv-cu4f06lds78s739sj9q0/deploys/dep-cu4f07lds78s739sja8g/${id}`);
       setEvents((prevEvents) => prevEvents.filter((event) => event._id !== id));
     } catch (error) {
       console.error('Error deleting event:', error);
@@ -26,7 +26,7 @@ const EventList = ({ events, setEvents }) => {
           description: updatedDescription || eventToEdit.description,
         };
 
-        const response = await axios.put(`https://event-management-rho-lyart.vercel.app/${id}`, updatedEvent);
+        const response = await axios.put(`https://dashboard.render.com/web/srv-cu4f06lds78s739sj9q0/deploys/dep-cu4f07lds78s739sja8g/${id}`, updatedEvent);
         setEvents((prevEvents) =>
           prevEvents.map((event) => (event._id === id ? response.data : event))
         );
