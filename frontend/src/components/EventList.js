@@ -4,7 +4,7 @@ import axios from 'axios';
 const EventList = ({ events, setEvents }) => {
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`https://dashboard.render.com/web/srv-cu4f06lds78s739sj9q0/deploys/dep-cu4f07lds78s739sja8g/${id}`);
+      await axios.delete(`http://localhost:5000/api/events/${id}`);
       setEvents((prevEvents) => prevEvents.filter((event) => event._id !== id));
     } catch (error) {
       console.error('Error deleting event:', error);
@@ -13,11 +13,6 @@ const EventList = ({ events, setEvents }) => {
 
   const handleEdit = async (id) => {
     const eventToEdit = events.find((event) => event._id === id);
-    if (!eventToEdit) {
-      console.error('Event not found');
-      return;
-    }
-
     const updatedName = prompt('Edit Event Name:', eventToEdit.name);
     const updatedLocation = prompt('Edit Event Location:', eventToEdit.location);
     const updatedDescription = prompt('Edit Event Description:', eventToEdit.description);
@@ -31,7 +26,7 @@ const EventList = ({ events, setEvents }) => {
           description: updatedDescription || eventToEdit.description,
         };
 
-        const response = await axios.put(`https://dashboard.render.com/web/srv-cu4f06lds78s739sj9q0/deploys/dep-cu4f07lds78s739sja8g/${id}`, updatedEvent);
+        const response = await axios.put(`http://localhost:5000/api/events/${id}`, updatedEvent);
         setEvents((prevEvents) =>
           prevEvents.map((event) => (event._id === id ? response.data : event))
         );
@@ -44,7 +39,9 @@ const EventList = ({ events, setEvents }) => {
   return (
     <div className="container my-4">
       <h1 className="text-center mb-4">Events</h1>
-      {Array.isArray(events) && events.length > 0 ? (
+      {events.length === 0 ? (
+        <p className="text-center">No events available</p>
+      ) : (
         <div className="row g-3">
           {events.map((event) => (
             <div className="col-12 col-md-6 col-lg-3" key={event._id}>
@@ -90,8 +87,6 @@ const EventList = ({ events, setEvents }) => {
             </div>
           ))}
         </div>
-      ) : (
-        <p className="text-center">No events available</p>
       )}
     </div>
   );
