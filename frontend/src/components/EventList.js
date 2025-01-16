@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+<<<<<<< HEAD
 const EventList = ({ events, setEvents }) => {
   const handleDelete = async (id) => {
     try {
@@ -8,88 +9,212 @@ const EventList = ({ events, setEvents }) => {
       setEvents((prevEvents) => prevEvents.filter((event) => event._id !== id));
     } catch (error) {
       console.error('Error deleting event:', error);
+=======
+const EventForm = ({ setEvents, eventToEdit, setEventToEdit }) => {
+  const [formData, setFormData] = useState({
+    name: '',
+    date: '',
+    time: '',
+    location: '',
+    description: '',
+    category: '',
+    reminder: '',
+  });
+
+  
+  useEffect(() => {
+    if (Notification.permission !== 'granted') {
+      Notification.requestPermission();
+>>>>>>> 21d19b6cd2fb9e71eedecea651344c515aecfc6b
     }
+  }, []);
+
+  
+  useEffect(() => {
+    if (eventToEdit) {
+      setFormData({
+        name: eventToEdit.name,
+        date: eventToEdit.date,
+        time: eventToEdit.time,
+        location: eventToEdit.location,
+        description: eventToEdit.description,
+        category: eventToEdit.category,
+        reminder: eventToEdit.reminder,
+      });
+    }
+  }, [eventToEdit]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
-  const handleEdit = async (id) => {
-    const eventToEdit = events.find((event) => event._id === id);
-    const updatedName = prompt('Edit Event Name:', eventToEdit.name);
-    const updatedLocation = prompt('Edit Event Location:', eventToEdit.location);
-    const updatedDescription = prompt('Edit Event Description:', eventToEdit.description);
+  const setReminderNotification = () => {
+    if (formData.reminder) {
+      const reminderDate = new Date(formData.reminder);  
+      const now = new Date();
 
-    if (updatedName || updatedLocation || updatedDescription) {
-      try {
-        const updatedEvent = {
-          ...eventToEdit,
-          name: updatedName || eventToEdit.name,
-          location: updatedLocation || eventToEdit.location,
-          description: updatedDescription || eventToEdit.description,
-        };
+      
+      if (reminderDate > now) {
+        const timeDifference = reminderDate - now;  
 
+<<<<<<< HEAD
         const response = await axios.put(`http://localhost:5000/api/events/${id}`, updatedEvent);
         setEvents((prevEvents) =>
           prevEvents.map((event) => (event._id === id ? response.data : event))
         );
       } catch (error) {
         console.error('Error editing event:', error);
+=======
+        setTimeout(() => {
+          new Notification('Event Reminder', {
+            body: `Reminder for event: ${formData.name} at ${formData.time}`,
+          });
+        }, timeDifference);
+>>>>>>> 21d19b6cd2fb9e71eedecea651344c515aecfc6b
       }
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    
+    setReminderNotification();
+
+    try {
+      if (eventToEdit) {
+        
+        const response = await axios.put(`/${eventToEdit._id}`, formData);
+        setEvents((prevEvents) =>
+          prevEvents.map((event) => (event._id === eventToEdit._id ? response.data : event))
+        );
+      } else {
+        
+        const response = await axios.post('https://dashboard.render.com/web/srv-cu4b89dds78s739qs2sg/deploys/dep-cu4b89lds78s739qs2vg', formData);
+        setEvents((prevEvents) => [...prevEvents, response.data]);
+      }
+
+      
+      setFormData({
+        name: '',
+        date: '',
+        time: '',
+        location: '',
+        description: '',
+        category: '',
+        reminder: '',
+      });
+      setEventToEdit(null);
+    } catch (error) {
+      console.error('Error saving event:', error);
+    }
+  };
+
   return (
-    <div className="container my-4">
-      <h1 className="text-center mb-4">Events</h1>
-      {events.length === 0 ? (
-        <p className="text-center">No events available</p>
-      ) : (
-        <div className="row g-3">
-          {events.map((event) => (
-            <div className="col-12 col-md-6 col-lg-3" key={event._id}>
-              <div className="card h-100 shadow-sm">
-                <div className="card-body d-flex flex-column">
-                  <h5 className="card-title text-truncate">{event.name}</h5>
-                  <p className="card-text">
-                    <strong>Date:</strong> {new Date(event.date).toLocaleDateString()}
-                  </p>
-                  <p className="card-text">
-                    <strong>Time:</strong> {event.time}
-                  </p>
-                  <p className="card-text">
-                    <strong>Location:</strong> {event.location}
-                  </p>
-                  <p className="card-text text-truncate">
-                    <strong>Description:</strong> {event.description || 'No description'}
-                  </p>
-                  <p className="card-text">
-                    <strong>Category:</strong> {event.category}
-                  </p>
-                  {event.reminder && (
-                    <p className="card-text">
-                      <strong>Reminder:</strong> {new Date(event.reminder).toLocaleString()}
-                    </p>
-                  )}
-                  <div className="mt-auto d-flex justify-content-between">
-                    <button
-                      className="btn btn-primary btn-sm"
-                      onClick={() => handleEdit(event._id)}
-                    >
-                      Edit
-                    </button>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() => handleDelete(event._id)}
-                    >
-                      Delete
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
+    <div className="container-fluid px-3 my-4">
+      {/* <h1 className="text-center mb-4">{eventToEdit ? 'Edit Event' : 'Create Event'}</h1> */}
+      <form className="row g-3" onSubmit={handleSubmit}>
+        <div className="col-md-6">
+          <label htmlFor="name" className="form-label">Event Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            className="form-control"
+            value={formData.name}
+            onChange={handleChange}
+            required
+          />
         </div>
-      )}
+
+        <div className="col-md-6">
+          <label htmlFor="category" className="form-label">Category</label>
+          <select
+            id="category"
+            name="category"
+            className="form-select"
+            value={formData.category}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select Category</option>
+            <option value="Work">Work</option>
+            <option value="Personal">Personal</option>
+            <option value="Birthday">Birthday</option>
+            {/* Add other categories as needed */}
+          </select>
+        </div>
+
+        <div className="col-md-6">
+          <label htmlFor="date" className="form-label">Event Date</label>
+          <input
+            type="date"
+            id="date"
+            name="date"
+            className="form-control"
+            value={formData.date}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="col-md-6">
+          <label htmlFor="time" className="form-label">Event Time</label>
+          <input
+            type="time"
+            id="time"
+            name="time"
+            className="form-control"
+            value={formData.time}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="col-md-6">
+          <label htmlFor="location" className="form-label">Event Location</label>
+          <input
+            type="text"
+            id="location"
+            name="location"
+            className="form-control"
+            value={formData.location}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <div className="col-md-6">
+          <label htmlFor="description" className="form-label">Event Description</label>
+          <textarea
+            id="description"
+            name="description"
+            className="form-control"
+            value={formData.description}
+            onChange={handleChange}
+            rows="3"
+          ></textarea>
+        </div>
+
+        <div className="col-md-6">
+          <label htmlFor="reminder" className="form-label">Reminder</label>
+          <input
+            type="datetime-local"
+            id="reminder"
+            name="reminder"
+            className="form-control"
+            value={formData.reminder}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="col-12">
+          <button type="submit" className="btn btn-success w-100">{eventToEdit ? 'Update Event' : 'Add Event'}</button>
+        </div>
+      </form>
     </div>
   );
 };
 
-export default EventList;
+export default EventForm;
