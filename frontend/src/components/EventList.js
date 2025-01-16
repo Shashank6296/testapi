@@ -26,7 +26,7 @@ const EventList = ({ events, setEvents }) => {
           description: updatedDescription || eventToEdit.description,
         };
 
-        const response = await axios.put(`http://localhost:5000/api/events/${id}`, updatedEvent);
+        const response = await axios.put(`https://testapi-3-a0gg.onrender.com/${id}`, updatedEvent);
         setEvents((prevEvents) =>
           prevEvents.map((event) => (event._id === id ? response.data : event))
         );
